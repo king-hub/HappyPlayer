@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Res/TitleBar.png</file>
+        <file>Res/Background.png</file>
+        <file>Res/TitleBarGlass.png</file>
+    </qresource>
+</RCC>
