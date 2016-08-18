@@ -124,7 +124,8 @@ void MainView::InitView()
 {
 
     titleBar = new TitleBar(this);
-    viewplayControlView = new PlayControlView(this);
+    viewVideoPlayerView = new VideoPlayerView(this);
+    //viewplayControlView = new PlayControlView(this);
     QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
     effect->setOpacity(0.8);
     titleBar->setGraphicsEffect(effect);
@@ -133,7 +134,7 @@ void MainView::InitView()
     layoutMain->setContentsMargins(QMargins());
     setLayout(layoutMain);
     layoutMain->addWidget(titleBar);
-    layoutMain->addWidget(viewplayControlView);
+    layoutMain->addWidget(viewVideoPlayerView);
 }
 
 void MainView::InitEvent()

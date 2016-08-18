@@ -19,6 +19,7 @@
 #include <QFileDialog>
 #include <QLabel>
 #include <View/PlayControlView.h>
+#include <VideoPlayerVew/VideoPlayerView.h>
 class MainView : public QWidget
 {
     Q_OBJECT
@@ -44,6 +45,7 @@ private:
     QVBoxLayout *layoutMain;
     PlayControlView *viewplayControlView;
     TitleBar *titleBar;
+    VideoPlayerView *viewVideoPlayerView;
 
 public slots:
     void ApplicationExit();
