@@ -9,7 +9,7 @@ using namespace QtAV;
 VideoPlayerView::VideoPlayerView(QWidget *parent) : QWidget(parent)
 {    
     m_unit = 1000;
-    setWindowTitle(QString::fromLatin1("QtAV simple player example"));
+    setWindowTitle(QString::fromLatin1(""));
     m_player = new AVPlayer(this);
     QVBoxLayout *vl = new QVBoxLayout();
     vl->setSpacing(0);
@@ -23,19 +23,21 @@ VideoPlayerView::VideoPlayerView(QWidget *parent) : QWidget(parent)
     }
     m_player->setRenderer(m_vo);
     vl->addWidget(m_vo->widget());
-    m_slider = new SliderControlPos();
+    m_slider = new SliderControlPos(this);
     m_slider->setOrientation(Qt::Horizontal);
     connect(m_slider, SIGNAL(sliderMoved(int)), SLOT(seekBySlider(int)));
     connect(m_slider, SIGNAL(sliderPressed()), SLOT(seekBySlider()));
     connect(m_player, SIGNAL(positionChanged(qint64)), SLOT(updateSlider(qint64)));
     connect(m_player, SIGNAL(started()), SLOT(updateSlider()));
     connect(m_player, SIGNAL(notifyIntervalChanged()), SLOT(updateSliderUnit()));
-
-    vl->addWidget(m_slider);
-    QHBoxLayout *hb = new QHBoxLayout();
+    //vl->addWidget(m_slider);
+    m_slider->resize(1000,20);
+    m_slider->move(10,530);
+    QHBoxLayout *hb = new QHBoxLayout(this);
     hb->setSpacing(0);
     hb->setContentsMargins(QMargins());
-    vl->addLayout(hb);
+    //vl->addLayout(hb);
+    m_slider->setLayout(hb);
     m_openBtn = new QPushButton(tr("Open"));
     m_playBtn = new QPushButton(tr("Play/Pause"));
     m_stopBtn = new QPushButton(tr("Stop"));

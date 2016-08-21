@@ -16,3 +16,23 @@ SliderControlPos::SliderControlPos(QWidget *parent) : QSlider(parent)
     setOrientation(Qt::Horizontal);
     setMouseTracking(true);
 }
+
+//void SliderControlPos::enterEvent(QEvent *event)
+//{
+
+//}
+
+//void SliderControlPos::leaveEvent(QEvent *event)
+//{
+
+//}
+
+//void SliderControlPos::mouseMoveEvent(QMouseEvent *event)
+//{
+
+//}
+
+//void SliderControlPos::mousePressEvent(QMouseEvent *event)
+//{
+
+//}

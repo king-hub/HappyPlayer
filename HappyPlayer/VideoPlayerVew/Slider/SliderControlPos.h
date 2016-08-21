@@ -9,20 +9,20 @@ class SliderControlPos : public QSlider
 public:
     explicit SliderControlPos(QWidget *parent = 0);
 
-signals:
-    void onEnter();
-    void onLeave();
-    void onHover(int pos, int value);
-protected:
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void mousePressEvent(QMouseEvent *event);
+//signals:
+//    void onEnter();
+//    void onLeave();
+//    void onHover(int pos, int value);
+//protected:
+//    virtual void enterEvent(QEvent *event);
+//    virtual void leaveEvent(QEvent *event);
+//    virtual void mouseMoveEvent(QMouseEvent *event);
+//    virtual void mousePressEvent(QMouseEvent *event);
 
-    inline int pick(const QPoint &pt) const;
-    int pixelPosToRangeValue(int pos) const;
-    void initStyleOption(QStyleOptionSlider *option) const;
-public slots:
+//    inline int pick(const QPoint &pt) const;
+//    int pixelPosToRangeValue(int pos) const;
+//    void initStyleOption(QStyleOptionSlider *option) const;
+//public slots:
 };
 
 #endif // SLIDERCONTROLPOS_H

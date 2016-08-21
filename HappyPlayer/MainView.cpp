@@ -13,6 +13,12 @@ MainView::MainView(QWidget *parent)
 {
     InitView();
     InitEvent();
+    setContentsMargins(2,2,2,2);
+//    QGraphicsDropShadowEffect *e = new QGraphicsDropShadowEffect();
+//    e->setColor(QColor(105,105,105));
+//    e->setBlurRadius(50);
+//    e->setOffset(8,8);
+//    setGraphicsEffect(e);
 }
 
 MainView::~MainView()
@@ -125,7 +131,7 @@ void MainView::InitView()
 
     titleBar = new TitleBar(this);
     viewVideoPlayerView = new VideoPlayerView(this);
-    //viewplayControlView = new PlayControlView(this);
+
     QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
     effect->setOpacity(0.8);
     titleBar->setGraphicsEffect(effect);
@@ -135,6 +141,9 @@ void MainView::InitView()
     setLayout(layoutMain);
     layoutMain->addWidget(titleBar);
     layoutMain->addWidget(viewVideoPlayerView);
+//    viewplayControlView = new PlayControlView(this);
+//    viewplayControlView->resize(5,30);
+//    viewplayControlView->move(0,200);
 }
 
 void MainView::InitEvent()
