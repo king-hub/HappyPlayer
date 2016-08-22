@@ -14,6 +14,7 @@ class VideoPlayerView : public QWidget
     Q_OBJECT
 public:
     explicit VideoPlayerView(QWidget *parent = 0);
+    void resizeEvent(QResizeEvent *event);
 public Q_SLOTS:
     void openMedia();
     void seekBySlider(int value);
@@ -33,6 +34,7 @@ private:
     QPushButton *m_stopBtn;
     int m_unit;
     void paintEvent(QPaintEvent *);
+
 public slots:
 };
 

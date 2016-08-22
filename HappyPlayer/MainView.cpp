@@ -11,6 +11,7 @@
 MainView::MainView(QWidget *parent)
     : QWidget(parent)
 {
+    //setWindowFlags(Qt::CustomizeWindowHint);
     InitView();
     InitEvent();
     setContentsMargins(2,2,2,2);

@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QVBoxLayout>
+#include <QDebug>
 using namespace QtAV;
 VideoPlayerView::VideoPlayerView(QWidget *parent) : QWidget(parent)
 {    
@@ -32,21 +33,29 @@ VideoPlayerView::VideoPlayerView(QWidget *parent) : QWidget(parent)
     connect(m_player, SIGNAL(notifyIntervalChanged()), SLOT(updateSliderUnit()));
     //vl->addWidget(m_slider);
     m_slider->resize(1000,20);
-    m_slider->move(10,530);
+    m_slider->move(10,500);
     QHBoxLayout *hb = new QHBoxLayout(this);
     hb->setSpacing(0);
     hb->setContentsMargins(QMargins());
     //vl->addLayout(hb);
-    m_slider->setLayout(hb);
-    m_openBtn = new QPushButton(tr("Open"));
+    // m_slider->setLayout(hb);
+    m_openBtn = new QPushButton(tr("Open"),this);
     m_playBtn = new QPushButton(tr("Play/Pause"));
     m_stopBtn = new QPushButton(tr("Stop"));
-    hb->addWidget(m_openBtn);
+    //hb->addWidget(m_openBtn);
+    m_openBtn->resize(50,20);
+    m_openBtn->move(462,500);
     hb->addWidget(m_playBtn);
     hb->addWidget(m_stopBtn);
     connect(m_openBtn, SIGNAL(clicked()), SLOT(openMedia()));
     connect(m_playBtn, SIGNAL(clicked()), SLOT(playPause()));
     connect(m_stopBtn, SIGNAL(clicked()), m_player, SLOT(stop()));
+}
+
+void VideoPlayerView::resizeEvent(QResizeEvent *event)
+{
+    m_slider->resize(event->size().width()-20,20);
+    m_slider->move(10,event->size().height()-30);
 }
 
 void VideoPlayerView::openMedia()
