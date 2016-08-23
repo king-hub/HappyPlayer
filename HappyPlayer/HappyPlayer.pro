@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     View/PlayControlView.cpp \
     VideoPlayerVew/VideoPlayerView.cpp \
     VideoPlayerVew/Button/ButtonPlay.cpp \
-    VideoPlayerVew/Slider/SliderControlPos.cpp
+    VideoPlayerVew/Slider/SliderControlPos.cpp \
+    VideoPlayerVew/Menu/MenuVideoPlayerView.cpp
 
 HEADERS  += MainView.h \
     Button/ButtonForStatusBar.h \
@@ -28,12 +29,15 @@ HEADERS  += MainView.h \
     View/PlayControlView.h \
     VideoPlayerVew/VideoPlayerView.h \
     VideoPlayerVew/Button/ButtonPlay.h \
-    VideoPlayerVew/Slider/SliderControlPos.h
+    VideoPlayerVew/Slider/SliderControlPos.h \
+    VideoPlayerVew/Menu/MenuVideoPlayerView.h
 
 RESOURCES += \
     Button/buttonresources.qrc \
     View/view.qrc \
-    VideoPlayerVew/Slider/slidercontrolpos.qrc
+    VideoPlayerVew/Slider/slidercontrolpos.qrc \
+    VideoPlayerVew/Menu/menu.qrc
 
 DISTFILES += \
-    VideoPlayerVew/Slider/Res/SliderControlSlider
+    VideoPlayerVew/Slider/Res/SliderControlSlider \
+    VideoPlayerVew/Menu/menu.qss

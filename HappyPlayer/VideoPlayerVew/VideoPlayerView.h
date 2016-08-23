@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QtAV>
 #include <VideoPlayerVew/Slider/SliderControlPos.h>
+#include <VideoPlayerVew/Menu/MenuVideoPlayerView.h>
 #include <QPaintEvent>
 QT_BEGIN_NAMESPACE
 class QPushButton;
@@ -15,6 +16,7 @@ class VideoPlayerView : public QWidget
 public:
     explicit VideoPlayerView(QWidget *parent = 0);
     void resizeEvent(QResizeEvent *event);
+    void addMenuAction();
 public Q_SLOTS:
     void openMedia();
     void seekBySlider(int value);
@@ -32,8 +34,10 @@ private:
     QPushButton *m_openBtn;
     QPushButton *m_playBtn;
     QPushButton *m_stopBtn;
+    MenuVideoPlayerView *mainmenu;
     int m_unit;
     void paintEvent(QPaintEvent *);
+    void contextMenuEvent(QContextMenuEvent *);
 
 public slots:
 };

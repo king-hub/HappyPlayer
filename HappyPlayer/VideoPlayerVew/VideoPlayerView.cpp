@@ -9,6 +9,8 @@
 using namespace QtAV;
 VideoPlayerView::VideoPlayerView(QWidget *parent) : QWidget(parent)
 {    
+    addMenuAction();
+
     m_unit = 1000;
     setWindowTitle(QString::fromLatin1(""));
     m_player = new AVPlayer(this);
@@ -31,31 +33,38 @@ VideoPlayerView::VideoPlayerView(QWidget *parent) : QWidget(parent)
     connect(m_player, SIGNAL(positionChanged(qint64)), SLOT(updateSlider(qint64)));
     connect(m_player, SIGNAL(started()), SLOT(updateSlider()));
     connect(m_player, SIGNAL(notifyIntervalChanged()), SLOT(updateSliderUnit()));
-    //vl->addWidget(m_slider);
-    m_slider->resize(1000,20);
-    m_slider->move(10,500);
     QHBoxLayout *hb = new QHBoxLayout(this);
     hb->setSpacing(0);
     hb->setContentsMargins(QMargins());
-    //vl->addLayout(hb);
-    // m_slider->setLayout(hb);
     m_openBtn = new QPushButton(tr("Open"),this);
     m_playBtn = new QPushButton(tr("Play/Pause"));
     m_stopBtn = new QPushButton(tr("Stop"));
-    //hb->addWidget(m_openBtn);
-    m_openBtn->resize(50,20);
-    m_openBtn->move(462,500);
     hb->addWidget(m_playBtn);
     hb->addWidget(m_stopBtn);
     connect(m_openBtn, SIGNAL(clicked()), SLOT(openMedia()));
     connect(m_playBtn, SIGNAL(clicked()), SLOT(playPause()));
     connect(m_stopBtn, SIGNAL(clicked()), m_player, SLOT(stop()));
+
+
 }
 
 void VideoPlayerView::resizeEvent(QResizeEvent *event)
 {
     m_slider->resize(event->size().width()-20,20);
     m_slider->move(10,event->size().height()-30);
+    m_openBtn->resize(50,20);
+    m_openBtn->move(event->size().width()/2-25,event->size().height()-50);
+}
+
+void VideoPlayerView::addMenuAction()
+{
+    mainmenu = new MenuVideoPlayerView();
+    QAction *a1 = new QAction();
+    a1->setText("打开文件");
+    mainmenu->addAction(a1);
+    QAction *a2 = new QAction();
+    a2->setText("退出");
+    mainmenu->addAction(a2);
 }
 
 void VideoPlayerView::openMedia()
@@ -107,4 +116,9 @@ void VideoPlayerView::updateSliderUnit()
 void VideoPlayerView::paintEvent(QPaintEvent *)
 {
 
+}
+
+void VideoPlayerView::contextMenuEvent(QContextMenuEvent *)
+{
+    mainmenu->exec(QCursor::pos());
 }
