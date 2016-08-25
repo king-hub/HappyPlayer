@@ -9,51 +9,62 @@
 using namespace QtAV;
 VideoPlayerView::VideoPlayerView(QWidget *parent) : QWidget(parent)
 {    
-    addMenuAction();
-
-    m_unit = 1000;
-    setWindowTitle(QString::fromLatin1(""));
-    m_player = new AVPlayer(this);
-    QVBoxLayout *vl = new QVBoxLayout();
-    vl->setSpacing(0);
-    vl->setContentsMargins(QMargins());
-    setLayout(vl);
-
-    m_vo = new VideoOutput(this);
-    if (!m_vo->widget()) {
+    InitView();
+    InitEvents();
+}
+void VideoPlayerView::setupUI()
+{
+    MainLayout = new QVBoxLayout(this);
+    setLayout(MainLayout);
+    playerView = new AVPlayer(this);
+    _VideoOutPutMain = new VideoOutput(this);
+    MainLayout->addWidget(_VideoOutPutMain->widget());
+    if (!_VideoOutPutMain->widget())
+    {
         QMessageBox::warning(0, QString::fromLatin1("QtAV error"), tr("Can not create video renderer"));
         return;
     }
-    m_player->setRenderer(m_vo);
-    vl->addWidget(m_vo->widget());
-    m_slider = new SliderControlPos(this);
-    m_slider->setOrientation(Qt::Horizontal);
-    connect(m_slider, SIGNAL(sliderMoved(int)), SLOT(seekBySlider(int)));
-    connect(m_slider, SIGNAL(sliderPressed()), SLOT(seekBySlider()));
-    connect(m_player, SIGNAL(positionChanged(qint64)), SLOT(updateSlider(qint64)));
-    connect(m_player, SIGNAL(started()), SLOT(updateSlider()));
-    connect(m_player, SIGNAL(notifyIntervalChanged()), SLOT(updateSliderUnit()));
-    QHBoxLayout *hb = new QHBoxLayout(this);
-    hb->setSpacing(0);
-    hb->setContentsMargins(QMargins());
-    m_openBtn = new QPushButton(tr("Open"),this);
-    m_playBtn = new QPushButton(tr("Play/Pause"));
-    m_stopBtn = new QPushButton(tr("Stop"));
-    hb->addWidget(m_playBtn);
-    hb->addWidget(m_stopBtn);
-    connect(m_openBtn, SIGNAL(clicked()), SLOT(openMedia()));
-    connect(m_playBtn, SIGNAL(clicked()), SLOT(playPause()));
-    connect(m_stopBtn, SIGNAL(clicked()), m_player, SLOT(stop()));
-
-
+    playerView->setRenderer(_VideoOutPutMain);
+    sliderPos = new SliderControlPos(this);
+    btnOpen = new QPushButton(tr("Open"),this);
+    btnPlay = new QPushButton(tr("Play"),this);
+    btnStop = new QPushButton(tr("Stop"),this);
 }
 
+void VideoPlayerView::InitView()
+{
+    addMenuAction();
+    setupUI();
+    m_unit = 1000;
+    MainLayout->setSpacing(0);
+    MainLayout->setContentsMargins(QMargins());
+    sliderPos->setOrientation(Qt::Horizontal);
+}
+
+void VideoPlayerView::InitEvents()
+{
+    connect(btnOpen, SIGNAL(clicked()), SLOT(openMedia()));
+    connect(btnPlay, SIGNAL(clicked()), SLOT(playPause()));
+    connect(btnStop, SIGNAL(clicked()), playerView, SLOT(stop()));
+    connect(sliderPos, SIGNAL(sliderMoved(int)), SLOT(seekBySlider(int)));
+    connect(sliderPos, SIGNAL(sliderPressed()), SLOT(seekBySlider()));
+    connect(playerView, SIGNAL(positionChanged(qint64)), SLOT(updateSlider(qint64)));
+    connect(playerView, SIGNAL(started()), SLOT(updateSlider()));
+    connect(playerView, SIGNAL(notifyIntervalChanged()), SLOT(updateSliderUnit()));
+}
 void VideoPlayerView::resizeEvent(QResizeEvent *event)
 {
-    m_slider->resize(event->size().width()-20,20);
-    m_slider->move(10,event->size().height()-30);
-    m_openBtn->resize(50,20);
-    m_openBtn->move(event->size().width()/2-25,event->size().height()-50);
+    sliderPos->resize(event->size().width()-20,20);
+    sliderPos->move(10,event->size().height()-30);
+
+    btnOpen->resize(50,20);
+    btnOpen->move(event->size().width()/2-25,event->size().height()-50);
+
+    btnPlay->resize(50,20);
+    btnPlay->move(10,event->size().height()-50);
+
+    btnStop->resize(50,20);
+    btnStop->move(event->size().width()-60,event->size().height()-50);
 }
 
 void VideoPlayerView::addMenuAction()
@@ -65,6 +76,9 @@ void VideoPlayerView::addMenuAction()
     QAction *a2 = new QAction();
     a2->setText("退出");
     mainmenu->addAction(a2);
+    QAction *a3 = new QAction();
+    a3->setText("帮助");
+    mainmenu->addAction(a3);
 }
 
 void VideoPlayerView::openMedia()
@@ -72,46 +86,48 @@ void VideoPlayerView::openMedia()
     QString file = QFileDialog::getOpenFileName(0, tr("Open a video"));
     if (file.isEmpty())
         return;
-    m_player->play(file);
+    playerView->play(file);
 }
 
 void VideoPlayerView::seekBySlider(int value)
 {
-    if (!m_player->isPlaying())
+    if (!playerView->isPlaying())
         return;
-    m_player->seek(qint64(value*m_unit));
+    playerView->seek(qint64(value*m_unit));
 }
 
 void VideoPlayerView::seekBySlider()
 {
-    seekBySlider(m_slider->value());
+    seekBySlider(sliderPos->value());
 }
 
 void VideoPlayerView::playPause()
 {
-    if (!m_player->isPlaying()) {
-        m_player->play();
+    if (!playerView->isPlaying()) {
+        playerView->play();
         return;
     }
-    m_player->pause(!m_player->isPaused());
+    playerView->pause(!playerView->isPaused());
 }
 
 void VideoPlayerView::updateSlider(qint64 value)
 {
-    m_slider->setRange(0, int(m_player->duration()/m_unit));
-    m_slider->setValue(int(value/m_unit));
+    sliderPos->setRange(0, int(playerView->duration()/m_unit));
+    sliderPos->setValue(int(value/m_unit));
 }
 
 void VideoPlayerView::updateSlider()
 {
-    updateSlider(m_player->position());
+    updateSlider(playerView->position());
 }
 
 void VideoPlayerView::updateSliderUnit()
 {
-    m_unit = m_player->notifyInterval();
+    m_unit = playerView->notifyInterval();
     updateSlider();
 }
+
+
 
 void VideoPlayerView::paintEvent(QPaintEvent *)
 {

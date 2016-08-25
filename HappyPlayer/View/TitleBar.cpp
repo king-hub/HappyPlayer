@@ -1,38 +1,47 @@
+//thank you from CSDN
 #include "TitleBar.h"
 #include <QBitmap>
 TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
 {
-    setFixedHeight(30);
-    int nSpacing = 10;
-    int nLeft = 10;
-    int nTop = 10;
-
-
+    setFixedHeight(30);   
     setAutoFillBackground(true);
     setAttribute(Qt::WA_TranslucentBackground);
-    btnClose = new ButtonForStatusBar(this);
-    btnClose->setType("Close");
-    btnClose->setFixedSize(15,15);
-    btnClose->setToolTip("关闭");
-    connect(btnClose,SIGNAL(clicked(bool)),this,SLOT(ViewEvent()));
-    btnMin = new ButtonForStatusBar(this);
-    btnMin->setType("Min");
-    btnMin->setToolTip("最小化");
-    btnMin->setFixedSize(15,15);
-    connect(btnMin,SIGNAL(clicked(bool)),this,SLOT(ViewEvent()));
-    btnMax = new ButtonForStatusBar(this);
-    btnMax->setType("Max");
-    btnMax->setToolTip("最大化");
-    btnMax->setFixedSize(15,15);
-    connect(btnMax,SIGNAL(clicked(bool)),this,SLOT(ViewEvent()));
-    btnClose->move(nLeft, nTop);
-    btnMin->move(nLeft + btnClose->width() + nSpacing, nTop);
-    btnMax->move(nLeft + btnMin->width() + btnMax->width() + 2 * nSpacing, nTop);
+    InitUI();
+    InitEvents();
+    //custom layout
+    btnClose->move(LeftValue, TopValue);
+    btnMin->move(LeftValue + btnClose->width() + SpacingValue, TopValue);
+    btnMax->move(LeftValue + btnMin->width() + btnMax->width() + 2 * SpacingValue, TopValue);
 }
 
 TitleBar::~TitleBar()
 {
 
+}
+
+void TitleBar::InitUI()
+{
+    btnClose = new ButtonForStatusBar(this);
+    btnClose->setType("Close");
+    btnClose->setFixedSize(15,15);
+    btnClose->setToolTip(QString::fromUtf8("关闭"));
+
+    btnMin = new ButtonForStatusBar(this);
+    btnMin->setType("Min");
+    btnMin->setFixedSize(15,15);
+    btnMin->setToolTip(QString::fromUtf8("最小化"));
+
+    btnMax = new ButtonForStatusBar(this);
+    btnMax->setType("Max");
+    btnMax->setFixedSize(15,15);
+    btnMax->setToolTip(QString::fromUtf8("最大化"));
+}
+
+void TitleBar::InitEvents()
+{
+    connect(btnClose,&QAbstractButton::clicked,this,&TitleBar::ViewEvent);
+    connect(btnMin,&QAbstractButton::clicked,this,&TitleBar::ViewEvent);
+    connect(btnMax,&QAbstractButton::clicked,this,&TitleBar::ViewEvent);
 }
 void TitleBar::mousePressEvent(QMouseEvent *event)
 {
@@ -46,7 +55,6 @@ void TitleBar::mousePressEvent(QMouseEvent *event)
         }
     }
        event->ignore();
-#else
 #endif
 }
 
@@ -58,12 +66,12 @@ void TitleBar::mouseDoubleClickEvent(QMouseEvent *event)
 
 void TitleBar::paintEvent(QPaintEvent *)
 {
+    //draw round rect
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
     painter.setBrush(Qt::white);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.drawRoundedRect(0, 3, width(), height(), 5, 5);
-
 }
 
 
@@ -85,5 +93,7 @@ void TitleBar::ViewEvent()
             {
                 qApp->exit();
             }
-        }
+    }
 }
+
+

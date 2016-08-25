@@ -39,17 +39,14 @@ private:
 #ifdef Q_OS_WIN
     void mousePressEvent(QMouseEvent *event);
 #endif
+    void mouseDoubleClickEvent(QMouseEvent *);
+    void setupUI();
     void InitView();
     void InitEvent();
     void paintEvent(QPaintEvent *);
     QVBoxLayout *layoutMain;
-    PlayControlView *viewplayControlView;
     TitleBar *titleBar;
     VideoPlayerView *viewVideoPlayerView;
-
-public slots:
-    void ApplicationExit();
-    void ApplicationMin();
 
 };
 

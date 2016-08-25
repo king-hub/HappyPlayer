@@ -29,9 +29,14 @@ signals:
 public slots:
     void ViewEvent();
 private:
+    void InitUI();
+    void InitEvents();
     ButtonForStatusBar *btnClose;//关闭按钮
     ButtonForStatusBar *btnMin;//最小化按钮
     ButtonForStatusBar *btnMax;//最大化按钮
+    int SpacingValue = 10;
+    int LeftValue = 10;
+    int TopValue = 10;
 
 };
 

@@ -8,6 +8,7 @@
 #include <QPaintEvent>
 QT_BEGIN_NAMESPACE
 class QPushButton;
+class QVBoxLayout;
 QT_END_NAMESPACE
 
 class VideoPlayerView : public QWidget
@@ -27,13 +28,17 @@ private Q_SLOTS:
     void updateSlider();
     void updateSliderUnit();
 private:
+    void setupUI();
+    void InitView();
+    void InitEvents();
 
-    QtAV::VideoOutput *m_vo;
-    QtAV::AVPlayer *m_player;
-    SliderControlPos *m_slider;
-    QPushButton *m_openBtn;
-    QPushButton *m_playBtn;
-    QPushButton *m_stopBtn;
+    QtAV::VideoOutput *_VideoOutPutMain;
+    QtAV::AVPlayer *playerView;
+    SliderControlPos *sliderPos;
+    QPushButton *btnOpen;
+    QPushButton *btnPlay;
+    QPushButton *btnStop;
+    QVBoxLayout *MainLayout;
     MenuVideoPlayerView *mainmenu;
     int m_unit;
     void paintEvent(QPaintEvent *);
