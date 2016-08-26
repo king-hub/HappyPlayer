@@ -54,7 +54,7 @@ void VideoPlayerView::InitEvents()
 }
 void VideoPlayerView::resizeEvent(QResizeEvent *event)
 {
-    sliderPos->resize(event->size().width()-20,20);
+    sliderPos->resize(event->size().width()-20,25);
     sliderPos->move(10,event->size().height()-30);
 
     btnOpen->resize(50,20);
@@ -105,9 +105,11 @@ void VideoPlayerView::playPause()
 {
     if (!playerView->isPlaying()) {
         playerView->play();
+        btnPlay->setText("Play");
         return;
     }
     playerView->pause(!playerView->isPaused());
+    btnPlay->setText("Pause");
 }
 
 void VideoPlayerView::updateSlider(qint64 value)

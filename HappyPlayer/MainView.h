@@ -8,10 +8,6 @@
 #include <QVBoxLayout>
 #include "Button/ButtonForStatusBar.h"
 #include "View/TitleBar.h"
-#include <QtAV/AVPlayer.h>
-#include <QtAVWidgets/GLWidgetRenderer2.h>
-#include <QtAV/MediaIO.h>
-#include <QtAV/VideoOutput.h>
 #include <QPushButton>
 #include <QSlider>
 #include <QLayout>

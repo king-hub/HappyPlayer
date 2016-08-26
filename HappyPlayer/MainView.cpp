@@ -6,14 +6,11 @@
 #include <QLinearGradient>
 #include <QPainterPath>
 #include <QBitmap>
-#include <QGraphicsDropShadowEffect>
-#include <QtMath>
 MainView::MainView(QWidget *parent)
     : QWidget(parent)
 {
     InitView();
     InitEvent();
-
 }
 
 MainView::~MainView()
@@ -41,7 +38,7 @@ void MainView::mouseMoveEvent(QMouseEvent *event)
 
 //
 #endif
-#ifdef Q_OS_WIN
+
 void MainView::mousePressEvent(QMouseEvent *event)
 {
     if (ReleaseCapture())
@@ -59,19 +56,19 @@ void MainView::setupUI()
     titleBar = new TitleBar(this);
     viewVideoPlayerView = new VideoPlayerView(this);
     layoutMain = new QVBoxLayout(this);
-}
-#endif
-void MainView::InitView()
-{    
-    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
-    effect->setOpacity(0.8);
-    titleBar->setGraphicsEffect(effect);   
-
     layoutMain->setSpacing(0);
     layoutMain->setContentsMargins(QMargins());
     setLayout(layoutMain);
     layoutMain->addWidget(titleBar);
     layoutMain->addWidget(viewVideoPlayerView);
+}
+
+void MainView::InitView()
+{    
+    setupUI();
+    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
+    effect->setOpacity(0.8);
+    titleBar->setGraphicsEffect(effect);       
 }
 
 void MainView::InitEvent()
