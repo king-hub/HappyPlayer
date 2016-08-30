@@ -1,8 +1,7 @@
 #include "MenuVideoPlayerView.h"
-
+#include <QGraphicsOpacityEffect>
 MenuVideoPlayerView::MenuVideoPlayerView(QWidget *parent) : QMenu(parent)
 {
-
     menu = new QMenu();
     QString qss;
     QFile qssFile(":/menu.qss");
@@ -15,3 +14,4 @@ MenuVideoPlayerView::MenuVideoPlayerView(QWidget *parent) : QMenu(parent)
     }
     menu->exec(QCursor::pos());
 }
+

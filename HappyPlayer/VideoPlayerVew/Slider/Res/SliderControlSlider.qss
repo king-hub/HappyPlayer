@@ -12,6 +12,7 @@ QSlider::handle:horizontal {
      border: 0px ;
      border-image:  url(:/Res/Slider.png);
      width: 15px;
+     height: 15px;
      margin: -7px -7px -7px -7px;
 }
 
@@ -21,5 +22,5 @@ background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #bcbcbc, 
 }
 
 QSlider::sub-page:horizontal{
- background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #439cf3, stop:0.25 #439cf3, stop:0.5 #439cf3, stop:1 #439cf3);
+ background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #007aff, stop:0.25 #007aff, stop:0.5 #007aff, stop:1 #007aff);
 }

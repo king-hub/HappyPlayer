@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Res/pausePress.png</file>
+        <file>Res/PlayNormal.png</file>
+        <file>Res/PlayPress.png</file>
+        <file>Res/PauseNormal.png</file>
+    </qresource>
+</RCC>

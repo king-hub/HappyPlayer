@@ -7,6 +7,7 @@
 #include <QLatin1String>
 #include <QAction>
 #include <QMenu>
+
 class MenuVideoPlayerView : public QMenu
 {
     Q_OBJECT

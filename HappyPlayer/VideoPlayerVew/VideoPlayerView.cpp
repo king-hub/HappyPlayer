@@ -6,6 +6,9 @@
 #include <QFileDialog>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QLabel>
+#include <QTime>
+#include <QGraphicsOpacityEffect>
 using namespace QtAV;
 VideoPlayerView::VideoPlayerView(QWidget *parent) : QWidget(parent)
 {    
@@ -25,10 +28,11 @@ void VideoPlayerView::setupUI()
         return;
     }
     playerView->setRenderer(_VideoOutPutMain);
+
     sliderPos = new SliderControlPos(this);
-    btnOpen = new QPushButton(tr("Open"),this);
-    btnPlay = new QPushButton(tr("Play"),this);
-    btnStop = new QPushButton(tr("Stop"),this);
+    btnPlay = new ButtonPlay(this);
+    labelCurrentTime = new QLabel(this);
+    labelTotalTime = new QLabel(this);
 }
 
 void VideoPlayerView::InitView()
@@ -39,51 +43,69 @@ void VideoPlayerView::InitView()
     MainLayout->setSpacing(0);
     MainLayout->setContentsMargins(QMargins());
     sliderPos->setOrientation(Qt::Horizontal);
+//    sliderPos->setMinimum(playerView->mediaStartPosition());
+//    sliderPos->setMaximum(playerView->mediaStopPosition());
+//    sliderPos->setValue(0);
+//    sliderPos->setEnabled(playerView->isSeekable());
+    QFont font(QString::fromLocal8Bit("微软雅黑"), 8, QFont::Light);
+    labelCurrentTime->setFont(font);
+    labelCurrentTime->setStyleSheet("color:white;");
+    labelCurrentTime->setText(QString::fromLatin1("00:00:00"));
+    labelCurrentTime->setContentsMargins(QMargins(1, 1, 1, 1));
+    labelTotalTime->setFont(font);
+    labelTotalTime->setStyleSheet("color:white;");
+    labelTotalTime->setText(QString::fromLatin1("00:00:00"));
+    labelTotalTime->setContentsMargins(QMargins(1, 1, 1, 1));
+
 }
 
 void VideoPlayerView::InitEvents()
 {
-    connect(btnOpen, SIGNAL(clicked()), SLOT(openMedia()));
-    connect(btnPlay, SIGNAL(clicked()), SLOT(playPause()));
-    connect(btnStop, SIGNAL(clicked()), playerView, SLOT(stop()));
+
+    connect(btnPlay, SIGNAL(clicked()), SLOT(play()));
+
     connect(sliderPos, SIGNAL(sliderMoved(int)), SLOT(seekBySlider(int)));
     connect(sliderPos, SIGNAL(sliderPressed()), SLOT(seekBySlider()));
     connect(playerView, SIGNAL(positionChanged(qint64)), SLOT(updateSlider(qint64)));
     connect(playerView, SIGNAL(started()), SLOT(updateSlider()));
     connect(playerView, SIGNAL(notifyIntervalChanged()), SLOT(updateSliderUnit()));
+    connect(openFileAction, SIGNAL(triggered()), this, SLOT(openAVFile()));
+    connect(closeVideoPlayerViewAction, SIGNAL(triggered()), this, SLOT(eventClose()));
+    connect(helpAction, SIGNAL(triggered()), this, SLOT(eventHelp()));
+    connect(playerView,SIGNAL(positionChanged(qint64)),this,SLOT(onPositionChange(qint64)));
 }
 void VideoPlayerView::resizeEvent(QResizeEvent *event)
 {
-    sliderPos->resize(event->size().width()-20,25);
-    sliderPos->move(10,event->size().height()-30);
+    sliderPos->resize(event->size().width()-150,25);
+    sliderPos->move(75,event->size().height()-30);
 
-    btnOpen->resize(50,20);
-    btnOpen->move(event->size().width()/2-25,event->size().height()-50);
+    btnPlay->resize(25,25);
+    btnPlay->move(event->size().width()/2-15,event->size().height()-60);
 
-    btnPlay->resize(50,20);
-    btnPlay->move(10,event->size().height()-50);
+    labelCurrentTime->resize(50,25);
+    labelCurrentTime->move(25,event->size().height()-30);
 
-    btnStop->resize(50,20);
-    btnStop->move(event->size().width()-60,event->size().height()-50);
+    labelTotalTime->resize(70,25);
+    labelTotalTime->move(event->size().width()-75,event->size().height()-30);
 }
 
 void VideoPlayerView::addMenuAction()
 {
     mainmenu = new MenuVideoPlayerView();
-    QAction *a1 = new QAction();
-    a1->setText("打开文件");
-    mainmenu->addAction(a1);
-    QAction *a2 = new QAction();
-    a2->setText("退出");
-    mainmenu->addAction(a2);
-    QAction *a3 = new QAction();
-    a3->setText("帮助");
-    mainmenu->addAction(a3);
+    openFileAction = new QAction();
+    openFileAction->setText("打开文件");
+    mainmenu->addAction(openFileAction);
+    closeVideoPlayerViewAction = new QAction();
+    closeVideoPlayerViewAction->setText("退出");
+    mainmenu->addAction(closeVideoPlayerViewAction);
+    helpAction = new QAction();
+    helpAction->setText("帮助");
+    mainmenu->addAction(helpAction);
 }
 
-void VideoPlayerView::openMedia()
+void VideoPlayerView::openAVFile()
 {
-    QString file = QFileDialog::getOpenFileName(0, tr("Open a video"));
+    QString file = QFileDialog::getOpenFileName(0, "打开所要播放的文件");
     if (file.isEmpty())
         return;
     playerView->play(file);
@@ -94,6 +116,7 @@ void VideoPlayerView::seekBySlider(int value)
     if (!playerView->isPlaying())
         return;
     playerView->seek(qint64(value*m_unit));
+    //labelTotalTime->setText(QTime(0, 0, 0).addMSecs(playerView->mediaStopPosition()).toString(QString::fromLatin1("HH:mm:ss")));
 }
 
 void VideoPlayerView::seekBySlider()
@@ -101,15 +124,26 @@ void VideoPlayerView::seekBySlider()
     seekBySlider(sliderPos->value());
 }
 
-void VideoPlayerView::playPause()
+void VideoPlayerView::play()
 {
     if (!playerView->isPlaying()) {
         playerView->play();
+
         btnPlay->setText("Play");
         return;
     }
     playerView->pause(!playerView->isPaused());
     btnPlay->setText("Pause");
+}
+
+void VideoPlayerView::togglebtnPlay()
+{
+    if(playerView->isPlaying())
+    {
+        playerView->pause(!playerView->isPaused());
+    }else{
+
+    }
 }
 
 void VideoPlayerView::updateSlider(qint64 value)
@@ -129,7 +163,12 @@ void VideoPlayerView::updateSliderUnit()
     updateSlider();
 }
 
-
+void VideoPlayerView::onPositionChange(qint64 pos)
+{
+    if(playerView->isSeekable())
+        //sliderPos->setValue(pos);
+    labelCurrentTime->setText(QTime(0, 0, 0).addMSecs(pos).toString(QString::fromLatin1("HH:mm:ss")));
+}
 
 void VideoPlayerView::paintEvent(QPaintEvent *)
 {
@@ -139,4 +178,14 @@ void VideoPlayerView::paintEvent(QPaintEvent *)
 void VideoPlayerView::contextMenuEvent(QContextMenuEvent *)
 {
     mainmenu->exec(QCursor::pos());
+}
+
+void VideoPlayerView::eventClose()
+{
+    qApp->exit();
+}
+
+void VideoPlayerView::eventHelp()
+{
+    qApp->aboutQt();
 }

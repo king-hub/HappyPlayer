@@ -36,7 +36,8 @@ RESOURCES += \
     Button/buttonresources.qrc \
     View/view.qrc \
     VideoPlayerVew/Slider/slidercontrolpos.qrc \
-    VideoPlayerVew/Menu/menu.qrc
+    VideoPlayerVew/Menu/menu.qrc \
+    VideoPlayerVew/Button/buttonplay.qrc
 
 DISTFILES += \
     VideoPlayerVew/Slider/Res/SliderControlSlider \
