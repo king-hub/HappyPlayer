@@ -8,6 +8,13 @@
 #include <VideoPlayerVew/Menu/MenuVideoPlayerView.h>
 #include <VideoPlayerVew/Button/ButtonPlay.h>
 #include <QPaintEvent>
+
+#ifdef Q_OS_WIN
+#include <qt_windows.h>
+#include <windows.h>
+#include <windowsx.h>
+#endif
+
 QT_BEGIN_NAMESPACE
 class QPushButton;
 class QVBoxLayout;
@@ -24,22 +31,32 @@ public Q_SLOTS:
     void openAVFile();
     void seekBySlider(int value);
     void seekBySlider();
-    void play();
+    void play(const QString &name);
     void togglebtnPlay();
     //means toggle button which control play pause
 
     void eventClose();
     void eventHelp();
 private Q_SLOTS:
+    void InitPlayer();
+
     void updateSlider(qint64 value);
     void updateSlider();
     void updateSliderUnit();
     void onPositionChange(qint64 pos);
 
+
+    void onSeekFinished(qint64);
+    void onMediaStatusChanged();
+    void onBufferProgress(qreal percent);
+    void onStartPlay();
+    void onStopPlay();
+    void onPaused(bool);
 protected:
     void resizeEvent(QResizeEvent *event);
     //custom main layout
     void addMenuAction();
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result);
 private:
     void setupUI();
     void InitView();
@@ -47,7 +64,10 @@ private:
 
     QVBoxLayout *MainLayout;
     QtAV::VideoOutput *_VideoOutPutMain;
+    QtAV::VideoRenderer *_VideoRender;
     QtAV::AVPlayer *playerView;
+    QString mFile;
+
     SliderControlPos *sliderPos;
     //Control Time Position,from QSlider
     QLabel *labelCurrentTime, *labelTotalTime;

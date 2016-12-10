@@ -8,7 +8,7 @@ class ButtonPlay : public QPushButton
     Q_OBJECT
 public:
     explicit ButtonPlay(QWidget *parent = 0);
-    //static bool ifPlay = false;
+    void setPlayState(bool ifPlay);
 signals:
 
 public slots:
@@ -21,7 +21,7 @@ private:
     enum ButtonStatus{NORMAL, ENTER, PRESS, NOSTATUS};
     ButtonStatus status;
     bool _ifPress = false;
-    //QString type;
+    bool _ifPlay;
 };
 
 #endif // BUTTONPLAY_H

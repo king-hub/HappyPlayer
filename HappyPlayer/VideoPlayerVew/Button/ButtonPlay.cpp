@@ -7,6 +7,11 @@ ButtonPlay::ButtonPlay(QWidget *parent) : QPushButton(parent)
     this->setFlat(true);
 }
 
+void ButtonPlay::setPlayState(bool ifPlay)
+{
+    _ifPlay = ifPlay;
+}
+
 void ButtonPlay::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
@@ -45,6 +50,7 @@ void ButtonPlay::paintEvent(QPaintEvent *)
     QPainter painter(this);
     QPixmap pixmap;
     painter.setRenderHint(QPainter::Antialiasing,true);
+    if(_ifPlay == false){
     switch (status)
     {
     case NORMAL:
@@ -62,6 +68,28 @@ void ButtonPlay::paintEvent(QPaintEvent *)
     default:
         pixmap.load(":/Res/PlayNormal.png");
         break;
+    }
+    }
+    else if(_ifPlay == true)
+    {
+        switch (status)
+        {
+        case NORMAL:
+            pixmap.load(":/Res/PauseNormal.png");
+            break;
+        case ENTER:
+            pixmap.load(":/Res/pausePress.png");
+            break;
+        case PRESS:
+            pixmap.load(":/Res/pausePress.png");
+            break;
+        case NOSTATUS:
+            pixmap.load(":/Res/pausePress.png");
+            break;
+        default:
+            pixmap.load(":/Res/PauseNormal.png");
+            break;
+        }
     }
     Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio;
     pixmap.scaled(25,25,aspectRatioMode);

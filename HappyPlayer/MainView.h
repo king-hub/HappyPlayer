@@ -25,16 +25,7 @@ public:
     ~MainView();
 
 private:
-#ifdef Q_OS_OSX
     void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseGrabber();
-    QPoint _DragPosition;
-#endif
-
-#ifdef Q_OS_WIN
-    void mousePressEvent(QMouseEvent *event);
-#endif
     void mouseDoubleClickEvent(QMouseEvent *);
     void setupUI();
     void InitView();
@@ -43,7 +34,8 @@ private:
     QVBoxLayout *layoutMain;
     TitleBar *titleBar;
     VideoPlayerView *viewVideoPlayerView;
-
+protected:
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result);
 };
 
 #endif // MAINVIEW_H
